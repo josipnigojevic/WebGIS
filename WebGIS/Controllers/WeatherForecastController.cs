@@ -316,21 +316,65 @@ namespace WebGIS.Controllers
         }
 
         // POST api/<GmlAPIController>
-        /*[HttpPost]
-        [Route("api/[controller]/SaveGmlFeature")]
-        public IActionResult Post([FromBody] string gmlContent)
+        [HttpPost]
+        [Route("api/[controller]/SaveFeature")]
+        public IActionResult Post(IFormFile gmlFile)
         {
             try
             {
-                
-        Nadopisat vamo logiku za post di saljen parseru i spreman u bazu
+                List<object> updatedFeatures = new List<object>();
+                // Read the contents of the file
+                using (var reader = new StreamReader(gmlFile.OpenReadStream()))
+                {
+                    string gmlContent = reader.ReadToEnd();
+                    // Parse the GML content using GmlParserService
+                    updatedFeatures = GmlParserService.GmlParser(gmlContent);
+                }
+
+                var feature = updatedFeatures.FirstOrDefault();
+                if (feature != null)
+                {
+                    var featureProperties = feature.GetType().GetProperties();
+
+                    if (featureProperties.Any(p => p.Name == "AnoCesticaId"))
+                    {
+                        _db.SaveAnoCestice(updatedFeatures.Cast<AnoCesticeModel>().ToList());
+                    }
+                    else if (featureProperties.Any(p => p.Name == "CesticaIzvorId"))
+                    {
+                        _db.SaveCestice(updatedFeatures.Cast<CesticeModel>().ToList());
+                    }
+                    else if (featureProperties.Any(p => p.Name == "ZgradaId"))
+                    {
+                        _db.SaveCesticeZgrade(updatedFeatures.Cast<CesticeZgradeModel>().ToList());
+                    }
+                    else if (featureProperties.Any(p => p.Name == "ZkCesticaId"))
+                    {
+                        _db.SaveIdentifikacije(updatedFeatures.Cast<IdentifikacijeModel>().ToList());
+                    }
+                    else if (featureProperties.Any(p => p.Name == "KatastarskaOpcinaId"))
+                    {
+                        _db.SaveKatastarskeOpcine(updatedFeatures.Cast<KatastarskeOpcineModel>().ToList());
+                    }
+                    else if (featureProperties.Any(p => p.Name == "MedjaCesticeId"))
+                    {
+                        _db.SaveMedjeCestica(updatedFeatures.Cast<MedjeCesticaModel>().ToList());
+                    }
+                    else if (featureProperties.Any(p => p.Name == "NacinUporabeId"))
+                    {
+                        _db.SaveNaciniUporabe(updatedFeatures.Cast<NaciniUporabeModel>().ToList());
+                    }
+                }
+
                 ResponseType type = ResponseType.Success;
-                return Ok(ResponseHandler.GetAppResponse(type, feature));
+                return Ok(ResponseHandler.GetAppResponse(type, updatedFeatures));
             }
             catch (Exception ex)
             {
                 return BadRequest(ResponseHandler.GetExceptionResponse(ex));
             }
-        }*/
+        }
+
+
     }
 }

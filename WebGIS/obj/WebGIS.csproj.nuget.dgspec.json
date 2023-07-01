@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\josip\\git\\sa pravin podacima\\WebGIS\\WebGIS.csproj": {}
+    "C:\\Users\\josip\\git\\GISeks\\WebGIS\\WebGIS\\WebGIS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\josip\\git\\sa pravin podacima\\WebGIS\\WebGIS.csproj": {
+    "C:\\Users\\josip\\git\\GISeks\\WebGIS\\WebGIS\\WebGIS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\josip\\git\\sa pravin podacima\\WebGIS\\WebGIS.csproj",
+        "projectUniqueName": "C:\\Users\\josip\\git\\GISeks\\WebGIS\\WebGIS\\WebGIS.csproj",
         "projectName": "WebGIS",
-        "projectPath": "C:\\Users\\josip\\git\\sa pravin podacima\\WebGIS\\WebGIS.csproj",
+        "projectPath": "C:\\Users\\josip\\git\\GISeks\\WebGIS\\WebGIS\\WebGIS.csproj",
         "packagesPath": "C:\\Users\\josip\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\josip\\git\\sa pravin podacima\\WebGIS\\obj\\",
+        "outputPath": "C:\\Users\\josip\\git\\GISeks\\WebGIS\\WebGIS\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\josip\\AppData\\Roaming\\NuGet\\NuGet.Config",

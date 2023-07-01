@@ -243,10 +243,16 @@ namespace WebGIS.Parser
                 obj.MaticniBrojKo = GetElementValue(node, "jis:MATICNI_BROJ_KO");
                 obj.BrojCestice = GetElementValue(node, "jis:BROJ_CESTICE");
                 obj.Rotacija = GetElementValue(node, "jis:ROTACIJA");
-                
 
-                // Add the object to the list
-                objects.Add(obj);
+                // Parse and store the coordinates as a string
+                XmlNode coordinatesNode = node.SelectSingleNode("jis:GEOM/gml:Point/gml:coordinates", GetNamespaceManager(node.OwnerDocument));
+                if (coordinatesNode != null)
+                {
+                    obj.Coordinates= coordinatesNode.InnerText;
+                }
+
+                    // Add the object to the list
+                    objects.Add(obj);
             }
 
             // Return the list of objects
