@@ -1,4 +1,5 @@
-﻿using WebGIS.EfCore;
+﻿using Microsoft.EntityFrameworkCore;
+using WebGIS.EfCore;
 
 namespace WebGIS.Model
 {
@@ -52,6 +53,12 @@ namespace WebGIS.Model
                         newEntry.BrojCestice = featureModel.BrojCestice;
                         newEntry.Coordinates = featureModel.Coordinates;
 
+                        var conflictingEntity = _context.AnoCestice.Local.FirstOrDefault(e => e.MaticniBrojKo == newEntry.MaticniBrojKo);
+                        if (conflictingEntity != null)
+                        {
+                            _context.Entry(conflictingEntity).State = EntityState.Detached;
+                        }
+
                         _context.AnoCestice.Add(newEntry);
                     }
                 }
@@ -65,6 +72,7 @@ namespace WebGIS.Model
                 Console.WriteLine("Inner Exception Stack Trace: " + innerException?.StackTrace);
             }
         }
+
         public void DeleteAnoCestice(int id)
         {
             var feature = _context.AnoCestice.Where(d => d.MaticniBrojKo.Equals(id)).FirstOrDefault();

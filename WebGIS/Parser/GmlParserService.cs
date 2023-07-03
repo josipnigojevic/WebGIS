@@ -239,17 +239,12 @@ namespace WebGIS.Parser
                 AnoCesticeModel obj = new AnoCesticeModel();
 
                 // Parse and store the data from XML into the object
-                obj.AnoCesticaId = GetElementValue(node, "jis:ANO_CESTICA_ID");
-                obj.MaticniBrojKo = GetElementValue(node, "jis:MATICNI_BROJ_KO");
-                obj.BrojCestice = GetElementValue(node, "jis:BROJ_CESTICE");
-                obj.Rotacija = GetElementValue(node, "jis:ROTACIJA");
+                obj.AnoCesticaId = node.SelectSingleNode("jis:ANO_CESTICA_ID", GetUpdatedNamespaceManager()).InnerText;
+                obj.MaticniBrojKo = node.SelectSingleNode("jis:MATICNI_BROJ_KO", GetUpdatedNamespaceManager()).InnerText;
+                obj.BrojCestice = node.SelectSingleNode("jis:BROJ_CESTICE", GetUpdatedNamespaceManager()).InnerText;
+                obj.Rotacija = node.SelectSingleNode("jis:ROTACIJA", GetUpdatedNamespaceManager()).InnerText;
+                obj.Coordinates = node.SelectSingleNode("jis:GEOM/gml:Point/gml:coordinates", GetUpdatedNamespaceManager()).InnerText;
 
-                // Parse and store the coordinates as a string
-                XmlNode coordinatesNode = node.SelectSingleNode("jis:GEOM/gml:Point/gml:coordinates", GetNamespaceManager(node.OwnerDocument));
-                if (coordinatesNode != null)
-                {
-                    obj.Coordinates= coordinatesNode.InnerText;
-                }
 
                     // Add the object to the list
                     objects.Add(obj);
@@ -268,35 +263,43 @@ namespace WebGIS.Parser
             return valueNode?.InnerText;
         }
 
- /*       // Helper method to retrieve the coordinates from the XML
-        static List<UpdatedGmlCoordinate> GetCoordinates(XmlNode node)
+        static XmlNamespaceManager GetUpdatedNamespaceManager()
         {
-            List<UpdatedGmlCoordinate> coordinates = new List<UpdatedGmlCoordinate>();
-
-
-            XmlNode coordinatesNode = node.SelectSingleNode("jis:GEOM/gml:Polygon/gml:outerBoundaryIs/gml:LinearRing/gml:coordinates", GetNamespaceManager(node.OwnerDocument));
-            if (coordinatesNode != null)
-            {
-
-                string coordinatesText = coordinatesNode.InnerText;
-                string[] coordinatePairs = coordinatesText.Split(' ');
-
-                foreach (string coordinatePair in coordinatePairs)
-                {
-                    string[] values = coordinatePair.Split(',');
-                    if (values.Length == 2)
-                    {
-                        double x = double.Parse(values[0]);
-                        double y = double.Parse(values[1]);
-                        UpdatedGmlCoordinate coord = new UpdatedGmlCoordinate(x, y);
-                        coordinates.Add(coord);
-                    }
-                }
-            }
-
-            return coordinates;
+            XmlNamespaceManager nsManager = new XmlNamespaceManager(new NameTable());
+            nsManager.AddNamespace("jis", "http://www.uredjenazemlja.hr");
+            nsManager.AddNamespace("gml", "http://www.opengis.net/gml");
+            return nsManager;
         }
- */
+
+        /*       // Helper method to retrieve the coordinates from the XML
+               static List<UpdatedGmlCoordinate> GetCoordinates(XmlNode node)
+               {
+                   List<UpdatedGmlCoordinate> coordinates = new List<UpdatedGmlCoordinate>();
+
+
+                   XmlNode coordinatesNode = node.SelectSingleNode("jis:GEOM/gml:Polygon/gml:outerBoundaryIs/gml:LinearRing/gml:coordinates", GetNamespaceManager(node.OwnerDocument));
+                   if (coordinatesNode != null)
+                   {
+
+                       string coordinatesText = coordinatesNode.InnerText;
+                       string[] coordinatePairs = coordinatesText.Split(' ');
+
+                       foreach (string coordinatePair in coordinatePairs)
+                       {
+                           string[] values = coordinatePair.Split(',');
+                           if (values.Length == 2)
+                           {
+                               double x = double.Parse(values[0]);
+                               double y = double.Parse(values[1]);
+                               UpdatedGmlCoordinate coord = new UpdatedGmlCoordinate(x, y);
+                               coordinates.Add(coord);
+                           }
+                       }
+                   }
+
+                   return coordinates;
+               }
+        */
         // Helper method to create and configure the namespace manager for XPath queries
         static XmlNamespaceManager GetNamespaceManager(XmlDocument doc)
         {
